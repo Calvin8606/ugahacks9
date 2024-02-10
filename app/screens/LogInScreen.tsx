@@ -13,26 +13,33 @@ export const LoginForm = ({ setLos, setUserId }: props) => {
   const [lastName, setLastName] = useState("");
   const [customerId, setCustomerId] = useState("");
 
-  // Function to handle form submission
-  const handleSubmit = async () => {
-    try {
-      // Make a POST request with the form data
-      const response = await axios.post(
-        `http://${process.env.EXPO_PUBLIC_BACKEND_URL}/nessie?url=http://api.nessieisreal.com/customers/?key=bf8433e4df1dc693db643a4926845cbb&method=POST`,
-        {
-          first_name: firstName,
-          last_name: lastName,
-          _id: customerId,
-        }
-      );
-      // Handle success
-      Alert.alert("Success", "You have logged in successfully!");
-    } catch (error) {
-      // Handle error
-      Alert.alert("Error", "There was an issue with your login.");
-      console.error(error);
-    }
-  };
+ // Function to handle form submission
+ const handleSubmit = async () => {
+   try {
+     const response = await axios.post(
+       `http://${process.env.EXPO_PUBLIC_BACKEND_URL}/nessie?url=http://api.nessieisreal.com/customers/?key=bf8433e4df1dc693db643a4926845cbb&method=POST`,
+       {
+         first_name: firstName,
+         last_name: lastName,
+         _id: customerId,
+       }
+     );
+     // Assuming the backend response includes a field indicating success or specific error messages
+     if (response.data.success) {
+       Alert.alert("Success", "You have logged in successfully!");
+       // Optionally set user ID or other login success actions here
+       // setUserId(response.data.userId); // Example
+     } else {
+       // Handle login failure based on backend response
+       Alert.alert("Login Failed", response.data.message || "Your login details did not match.");
+     }
+   } catch (error) {
+     // Handle error
+     Alert.alert("Error", "There was an issue with your login.");
+     console.error(error);
+   }
+ };
+
 
   return (
     <View style={styles.container}>
