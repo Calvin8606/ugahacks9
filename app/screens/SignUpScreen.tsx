@@ -77,7 +77,7 @@ export const SignUpForm = ({ setUserId, userId }: props) => {
     <>
       {los === 1 ? (
         <ScrollView contentContainerStyle={styles.container}>
-          <Text>{userId}</Text>
+          <Text>Sign Up</Text>
           <TextInput
             style={styles.input}
             placeholder="First Name"

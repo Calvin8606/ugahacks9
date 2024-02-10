@@ -1,6 +1,6 @@
 // Import necessary components and hooks
 import React, { useState } from "react";
-import { View, TextInput, Button, StyleSheet, Alert } from "react-native";
+import { View, TextInput, Button, StyleSheet, Alert, Text } from "react-native";
 import axios from "axios";
 interface props {
   setLos: Function;
@@ -41,6 +41,7 @@ export const LoginForm = ({ setLos, setUserId }: props) => {
 
   return (
     <View style={styles.container}>
+      <Text>Log in</Text>
       <TextInput
         placeholder="First Name"
         value={firstName}

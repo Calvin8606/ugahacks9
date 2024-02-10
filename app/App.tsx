@@ -26,6 +26,7 @@ export interface User {
   first_name: string;
   last_name: string;
   address: Address;
+  account: any;
 }
 export default function App() {
   const [balance, setBalance] = useState(100); // Starting balance
@@ -47,6 +48,10 @@ export default function App() {
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    console.log("USER", user);
+  }, [user]);
 
   console.log(EXPO_PUBLIC_BACKEND_URL);
   useEffect(() => {
@@ -74,6 +79,55 @@ export default function App() {
         console.log("getting");
         console.log(response.data);
         if (response.data) {
+          const userd = response.data;
+          //api.nessieisreal.com/customers/65c787c59683f20dd5188e4f/accounts/?key=bf8433e4df1dc693db643a4926845cbb
+          axios
+            .get(
+              `http://${
+                EXPO_PUBLIC_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL
+              }/nessie?url=http://api.nessieisreal.com/customers/${userId}/accounts/?key=bf8433e4df1dc693db643a4926845cbb`
+            )
+            .then((res: any) => {
+              const accounts = res.data;
+              console.log("accounts", res.data);
+              if (accounts?.length === 0) {
+                axios
+                  .post(
+                    `http://${
+                      EXPO_PUBLIC_BACKEND_URL ||
+                      process.env.EXPO_PUBLIC_BACKEND_URL
+                    }/nessie?url=http://api.nessieisreal.com/customers/${userId}/accounts/?key=bf8433e4df1dc693db643a4926845cbb`,
+                    {
+                      type: "Credit Card",
+                      nickname: "string",
+                      rewards: 0,
+                      balance: 0,
+                    }
+                  )
+                  .then((thirdres: any) => {
+                    console.log("third", thirdres);
+                    setUser((prev) => ({
+                      ...(prev as User),
+                      account: thirdres.data.objectCreated,
+                    }));
+                  });
+              } else {
+                axios
+                  .get(
+                    `http://${
+                      EXPO_PUBLIC_BACKEND_URL ||
+                      process.env.EXPO_PUBLIC_BACKEND_URL
+                    }/nessie?url=http://api.nessieisreal.com/customers/${userId}/accounts/?key=bf8433e4df1dc693db643a4926845cbb`
+                  )
+                  .then((test: any) => {
+                    console.log("ee", test.data[0]);
+                    setUser((prev) => ({
+                      ...(prev as User),
+                      account: test.data[0],
+                    }));
+                  });
+              }
+            });
           setUser(response.data as User);
         }
       })
