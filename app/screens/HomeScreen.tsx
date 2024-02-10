@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 // @ts-ignore
 import { EXPO_PUBLIC_BACKEND_URL } from "@env";
+
 interface props {
   user: User;
   setUserId: Function;
@@ -36,7 +37,7 @@ export const HomeScreen = ({ user, setUserId, setUser }: props) => {
     <View style={styles.container}>
       <Text style={styles.balanceText}>Welcome {user.first_name}</Text>
       {user.account && (
-        <Text style={styles.balanceText}>balance ${user.account.balance}</Text>
+        <Text style={styles.balanceText}>Balance ${user.account.balance}</Text>
       )}
       <View style={styles.buttonContainer}>
         <Button
@@ -54,16 +55,20 @@ export const HomeScreen = ({ user, setUserId, setUser }: props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
+    paddingTop: 50,
   },
   balanceText: {
     fontSize: 24,
     marginBottom: 20,
   },
   buttonContainer: {
-    gap: 5,
-    marginBottom: 12,
+    position: 'absolute', // Position the button absolutely
+    bottom: 50, // Distance from the bottom
+    left: 0, // Start from the left edge
+    right: 0, // Stretch to the right edge
+    alignItems: 'center', // Center the button horizontally
   },
 });
 
