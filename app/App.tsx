@@ -78,7 +78,7 @@ export interface User {
   deposits: Deposit[];
   withdrawals: Withdraw[];
   transactionsTo: Transaction[];
-  transactionsFrom: Transaction[];t
+  transactionsFrom: Transaction[];
 }
 export default function App() {
   const [balance, setBalance] = useState(100); // Starting balance

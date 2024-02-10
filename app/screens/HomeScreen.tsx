@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { View, Text, Button, StyleSheet, FlatList } from "react-native";
-import { User } from "../App"; // Assuming these interfaces are defined in App.tsx
+import { Deposit, Transaction, User, Withdraw } from "../App";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 // @ts-ignore
@@ -12,81 +12,99 @@ interface Props {
   setUser: Function;
 }
 
-// Define a type for the unified transaction to ensure type safety
-interface UnifiedTransaction {
-  _id: string;
-  amount: number;
-  transaction_date: string;
-  type: 'Deposit' | 'Withdrawal' | 'Transaction To' | 'Transaction From';
-}
-
 export const HomeScreen = ({ user, setUserId, setUser }: Props) => {
-useEffect(() => {
+  useEffect(() => {
     if (user.account) {
-      // Fetch deposits
-      axios.get(`http://${
-      EXPO_PUBLIC_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL
-      }/nessie?url=http://api.nessieisreal.com/accounts/${
-      user?.account._id
-      }/withdrawals/?key=bf8433e4df1dc693db643a4926845cbb`)
-        .then((res) => {
-          const depositsWithTypes = res.data.map((deposit) => ({
-            ...deposit,
-            type: 'Deposit',
+      axios
+        .get(
+          `http://${
+            EXPO_PUBLIC_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL
+          }/nessie?url=http://api.nessieisreal.com/accounts/${
+            user?.account._id
+          }/deposits/?key=bf8433e4df1dc693db643a4926845cbb`
+        )
+        .then((res: any) => {
+          setUser((prev: User) => ({
+            ...prev,
+            deposits: res.data as Deposit[],
           }));
-          setUser(prev => ({ ...prev, deposits: depositsWithTypes }));
-        })
-        .catch(error => console.error("Error fetching deposits:", error));
+        });
 
-      // Fetch withdrawals
-      axios.get(`http://api.nessieisreal.com/accounts/${user?.account?._id}/transfers?type=payer&key=bf8433e4df1dc693db643a4926845cbb`)
-        .then((res) => {
-          const withdrawalsWithTypes = res.data.map((withdrawal) => ({
-            ...withdrawal,
-            type: 'Withdrawal',
+      axios
+        .get(
+          `http://${
+            EXPO_PUBLIC_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL
+          }/nessie?url=http://api.nessieisreal.com/accounts/${
+            user?.account._id
+          }/withdrawals/?key=bf8433e4df1dc693db643a4926845cbb`
+        )
+        .then((res: any) => {
+          console.log("HEEE", res);
+          setUser((prev: User) => ({
+            ...(prev as User),
+            withdrawals: res.data as Withdraw[],
           }));
-          setUser(prev => ({ ...prev, withdrawals: withdrawalsWithTypes }));
-        })
-        .catch(error => console.error("Error fetching withdrawals:", error));
-
-      // Add similar API calls for transactionsTo and transactionsFrom with appropriate handling
+        });
+      const customHeaders = {
+        "X-Custom-Header": `http://api.nessieisreal.com/accounts/${user?.account?._id}/transfers?type=payer&key=bf8433e4df1dc693db643a4926845cbb`,
+      };
+      console.log("Custome head", customHeaders);
+      axios
+        .get(
+          `http://${
+            EXPO_PUBLIC_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL
+          }/nessie?url=http://api.nessieisreal.com/accounts/${
+            user?.account?._id
+          }/transfers?type=payer&key=bf8433e4df1dc693db643a4926845cbb`,
+          {
+            headers: customHeaders,
+          }
+        )
+        .then((res: any) => {
+          console.log("TRANS", res);
+          setUser((prev: User) => ({
+            ...(prev as User),
+            transactionsTo: res.data as Transaction[],
+          }));
+        });
+      const customHeaders2 = {
+        "X-Custom-Header": `http://api.nessieisreal.com/accounts/${user?.account?._id}/transfers?type=payee&key=bf8433e4df1dc693db643a4926845cbb`,
+      };
+      axios
+        .get(
+          `http://${
+            EXPO_PUBLIC_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL
+          }/nessie?url=http://api.nessieisreal.com/accounts/${
+            user?.account?._id
+          }/transfers?type=payee&key=bf8433e4df1dc693db643a4926845cbb`,
+          {
+            headers: customHeaders2,
+          }
+        )
+        .then((res: any) => {
+          console.log("TRANS", res);
+          setUser((prev: User) => ({
+            ...(prev as User),
+            transactionsFrom: res.data as Transaction[],
+          }));
+        });
     }
-  }, [user.account, EXPO_PUBLIC_BACKEND_URL, setUser]);
-
-  // Create a unified transactions list with type safety
-  const allTransactions: UnifiedTransaction[] = [
-    ...(user.deposits || []).map(deposit => ({
-      ...deposit,
-      type: 'Deposit' as const, // Ensures the type is exactly 'Deposit'
-    })),
-    ...(user.withdrawals || []).map(withdrawal => ({
-      ...withdrawal,
-      type: 'Withdrawal' as const, // Ensures the type is exactly 'Withdrawal'
-    })),
-    ...(user.transactionsTo || []).map(transaction => ({
-      ...transaction,
-      type: 'Transaction To' as const, // Ensures the type is exactly 'Transaction To'
-    })),
-    ...(user.transactionsFrom || []).map(transaction => ({
-      ...transaction,
-      type: 'Transaction From' as const, // Ensures the type is exactly 'Transaction From'
-    })),
-  ];
+  }, [user.account]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.balanceText}>Welcome {user.first_name}</Text>
       {user.account && (
-        <Text style={styles.balanceText}>Balance: ${user.account.balance}</Text>
+        <Text style={styles.balanceText}>Balance ${user.account.balance}</Text>
       )}
       <Text style={styles.transactionsHeader}>Transactions</Text>
       <FlatList
-        data={allTransactions}
-        keyExtractor={(item, index) => `${item._id}-${index}`} // Guarantee uniqueness
+        data={user.deposits}
+        keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <View style={styles.transactionRow}>
             <Text style={styles.transactionText}>
-              {item.type}: {item.transaction_date} - ${item.amount}
+              {item.transaction_date}: ${item.amount}
             </Text>
           </View>
         )}
@@ -97,7 +115,6 @@ useEffect(() => {
           onPress={() => {
             AsyncStorage.removeItem("@storage_Key");
             setUserId("");
-            setUser(undefined); // Reset user state upon logout
           }}
         />
       </View>
@@ -130,7 +147,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   buttonContainer: {
-    marginTop: 20,
+    position: "absolute",
+    bottom: 50,
+    left: 0,
+    right: 0,
     alignItems: "center",
   },
 });
