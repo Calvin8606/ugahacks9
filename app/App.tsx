@@ -60,7 +60,10 @@ export default function App() {
       }
     };
     storeData(userId);
-    if (!userId) return;
+    if (!userId) {
+      setUser(undefined);
+      return;
+    }
     axios
       .get(
         `http://${
@@ -86,7 +89,7 @@ export default function App() {
             return !user ? (
               <SignUpForm setUserId={setUserId} userId={userId} />
             ) : (
-              <HomeScreen user={user} />
+              <HomeScreen setUserId={setUserId} user={user} />
             );
           }}
         </Stack.Screen>

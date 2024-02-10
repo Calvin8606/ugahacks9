@@ -13,31 +13,31 @@ export const LoginForm = ({ setLos, setUserId }: props) => {
   const [lastName, setLastName] = useState("");
   const [customerId, setCustomerId] = useState("");
 
- const handleSubmit = async () => {
-   try {
-     // Construct the URL with query parameters
-     const url = `http://${process.env.EXPO_PUBLIC_BACKEND_URL}/nessie?url=http://api.nessieisreal.com/customers/?key=bf8433e4df1dc693db643a4926845cbb&method=GET&first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&customer_id=${encodeURIComponent(customerId)}`;
+  const handleSubmit = async () => {
+    try {
+      // Construct the URL with query parameters
+      const url = `http://${process.env.EXPO_PUBLIC_BACKEND_URL}/nessie?url=http://api.nessieisreal.com/customers/${customerId}/?key=bf8433e4df1dc693db643a4926845cbb&method=GET`;
 
-     // Make a GET request
-     const response = await axios.get(url);
+      // Make a GET request
+      const response = await axios.get(url);
+      console.log("res", response.data);
+      // Process the response
+      // Assuming the backend or your proxy handles the query and returns appropriate response
+      if (response.data._id === customerId.toLocaleLowerCase()) {
+        setUserId(response.data._id);
 
-     // Process the response
-     // Assuming the backend or your proxy handles the query and returns appropriate response
-     if (response.data.success) {
-       Alert.alert("Success", "Login validation successful!");
-       // Perform actions on success, e.g., navigating to another screen or setting user context
-     } else {
-       // Handle case where user details do not match
-       Alert.alert("Login Failed", "No matching records found.");
-     }
-   } catch (error) {
-     // Handle error
-     Alert.alert("Error", "There was an issue with your login.");
-     console.error(error);
-   }
- };
-
-
+        Alert.alert("Success", "Login validation successful!");
+        // Perform actions on success, e.g., navigating to another screen or setting user context
+      } else {
+        // Handle case where user details do not match
+        Alert.alert("Login Failed", "No matching records found.");
+      }
+    } catch (error) {
+      // Handle error
+      Alert.alert("Error", "There was an issue with your login.");
+      console.error(error);
+    }
+  };
 
   return (
     <View style={styles.container}>
