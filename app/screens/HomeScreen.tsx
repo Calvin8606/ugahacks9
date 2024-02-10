@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
-import { Deposit, User } from "../App";
+import { Deposit, Transaction, User, Withdraw } from "../App";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 // @ts-ignore
@@ -27,6 +27,65 @@ export const HomeScreen = ({ user, setUserId, setUser }: props) => {
           setUser((prev: User) => ({
             ...(prev as User),
             deposits: res.data as Deposit[],
+          }));
+        });
+
+      axios
+        .get(
+          `http://${
+            EXPO_PUBLIC_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL
+          }/nessie?url=http://api.nessieisreal.com/accounts/${
+            user?.account._id
+          }/withdrawals/?key=bf8433e4df1dc693db643a4926845cbb`
+        )
+        .then((res: any) => {
+          console.log("HEEE", res);
+          setUser((prev: User) => ({
+            ...(prev as User),
+            withdrawals: res.data as Withdraw[],
+          }));
+        });
+      const customHeaders = {
+        "X-Custom-Header": `http://api.nessieisreal.com/accounts/${user?.account?._id}/transfers?type=payer&key=bf8433e4df1dc693db643a4926845cbb`,
+      };
+      console.log("Custome head", customHeaders);
+      axios
+        .get(
+          `http://${
+            EXPO_PUBLIC_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL
+          }/nessie?url=http://api.nessieisreal.com/accounts/${
+            user?.account?._id
+          }/transfers?type=payer&key=bf8433e4df1dc693db643a4926845cbb`,
+          {
+            headers: customHeaders,
+          }
+        )
+        .then((res: any) => {
+          console.log("TRANS", res);
+          setUser((prev: User) => ({
+            ...(prev as User),
+            transactionsTo: res.data as Transaction[],
+          }));
+        });
+      const customHeaders2 = {
+        "X-Custom-Header": `http://api.nessieisreal.com/accounts/${user?.account?._id}/transfers?type=payee&key=bf8433e4df1dc693db643a4926845cbb`,
+      };
+      axios
+        .get(
+          `http://${
+            EXPO_PUBLIC_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL
+          }/nessie?url=http://api.nessieisreal.com/accounts/${
+            user?.account?._id
+          }/transfers?type=payee&key=bf8433e4df1dc693db643a4926845cbb`,
+          {
+            headers: customHeaders2,
+          }
+        )
+        .then((res: any) => {
+          console.log("TRANS", res);
+          setUser((prev: User) => ({
+            ...(prev as User),
+            transactionsFrom: res.data as Transaction[],
           }));
         });
     }

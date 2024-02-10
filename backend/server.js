@@ -26,16 +26,14 @@ app.get("/catgirl", async (req, res) => {
 });
 
 async function test(url, method, body) {
+  console.log("BODDD", body);
   try {
     let response;
-    console.log(url);
-    console.log("in req, ee", method, body);
     if (method === "GET") {
       response = await axios.get(url);
     } else if (method === "POST") {
       response = await axios.post(url, body);
     }
-
     console.log(response.data);
     return response.data;
     // Send the response data back to the client
@@ -50,8 +48,10 @@ async function test(url, method, body) {
 app.get("/nessie", async (req, res) => {
   try {
     const body = req.body;
+    console.log("Header", req.headers["x-custom-header"]);
+    const headerurl = req.headers["x-custom-header"];
     const url = req.query.url;
-    const data = await test(url, "GET", body);
+    const data = await test(headerurl || url, "GET", body);
     res.json(data);
   } catch (error) {
     // Handle any errors

@@ -39,6 +39,25 @@ export interface Deposit {
   transaction_date: string;
   type: string;
 }
+export interface Withdraw {
+  _id: string;
+  amount: number;
+  medium: string;
+  payer_id: string;
+  status: string;
+  transaction_date: string;
+  type: string;
+}
+export interface Transaction {
+  _id: string;
+  amount: number;
+  medium: string;
+  payer_id: string;
+  payee_id: string;
+  status: string;
+  transaction_date: string;
+  type: string;
+}
 
 export interface User {
   _id: string;
@@ -47,6 +66,9 @@ export interface User {
   address: Address;
   account: Account;
   deposits: Deposit[];
+  withdrawals: Withdraw[];
+  transactionsTo: Transaction[];
+  transactionsFrom: Transaction[];
 }
 export default function App() {
   const [balance, setBalance] = useState(100); // Starting balance
@@ -118,10 +140,10 @@ export default function App() {
                       process.env.EXPO_PUBLIC_BACKEND_URL
                     }/nessie?url=http://api.nessieisreal.com/customers/${userId}/accounts/?key=bf8433e4df1dc693db643a4926845cbb`,
                     {
-                      type: "Credit Card",
+                      type: "Checking",
                       nickname: "string",
                       rewards: 0,
-                      balance: 0,
+                      balance: 500,
                     }
                   )
                   .then((thirdres: any) => {
