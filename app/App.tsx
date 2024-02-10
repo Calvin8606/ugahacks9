@@ -13,7 +13,7 @@ import { EXPO_PUBLIC_BACKEND_URL } from "@env";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const Stack = createNativeStackNavigator();
-interface Address {
+export interface Address {
   street_number: string;
   street_name: string;
   city: string;
@@ -21,12 +21,22 @@ interface Address {
   zip: string;
 }
 
-interface Account {
+export interface Account {
   _id: string;
   balance: number;
   customer_id: string;
   nickname: string;
   reward: number;
+  type: string;
+}
+
+export interface Deposit {
+  _id: string;
+  amount: number;
+  medium: string;
+  payee_id: string;
+  status: string;
+  transaction_date: string;
   type: string;
 }
 
@@ -36,6 +46,7 @@ export interface User {
   last_name: string;
   address: Address;
   account: Account;
+  deposits: Deposit[];
 }
 export default function App() {
   const [balance, setBalance] = useState(100); // Starting balance
@@ -149,10 +160,10 @@ export default function App() {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home">
           {(props) => {
-            return !user ? (
+            return !user?.account ? (
               <SignUpForm setUserId={setUserId} userId={userId} />
             ) : (
-              <HomeScreen setUserId={setUserId} user={user} />
+              <HomeScreen setUser={setUser} setUserId={setUserId} user={user} />
             );
           }}
         </Stack.Screen>
