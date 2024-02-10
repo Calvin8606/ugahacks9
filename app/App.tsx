@@ -21,12 +21,21 @@ interface Address {
   zip: string;
 }
 
+interface Account {
+  _id: string;
+  balance: number;
+  customer_id: string;
+  nickname: string;
+  reward: number;
+  type: string;
+}
+
 export interface User {
   _id: string;
   first_name: string;
   last_name: string;
   address: Address;
-  account: any;
+  account: Account;
 }
 export default function App() {
   const [balance, setBalance] = useState(100); // Starting balance
@@ -108,7 +117,7 @@ export default function App() {
                     console.log("third", thirdres);
                     setUser((prev) => ({
                       ...(prev as User),
-                      account: thirdres.data.objectCreated,
+                      account: thirdres.data.objectCreated as Account,
                     }));
                   });
               } else {
@@ -123,7 +132,7 @@ export default function App() {
                     console.log("ee", test.data[0]);
                     setUser((prev) => ({
                       ...(prev as User),
-                      account: test.data[0],
+                      account: test.data[0] as Account,
                     }));
                   });
               }
