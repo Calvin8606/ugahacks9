@@ -15,14 +15,18 @@ app.listen(3000, () => {
 });
 
 app.get("/catgirl", async (req, res) => {
-  const prompt = req.query.prompt;
-  if (!prompt) {
-    res.send({ error: "no prompt" });
-    return;
+  try {
+    const prompt = req.query.prompt.replace("_", " ");
+    if (!prompt) {
+      res.send({ error: "no prompt" });
+      return;
+    }
+    const promptResponse = await generateResponse(prompt);
+    console.log(promptResponse);
+    res.send({ message: promptResponse });
+  } catch (e) {
+    res.send({ message: "Im very busy right now, try again later" });
   }
-  const promptResponse = await generateResponse(prompt);
-  console.log(promptResponse);
-  res.send({ message: promptResponse });
 });
 
 async function test(url, method, body) {

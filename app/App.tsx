@@ -13,6 +13,8 @@ import {
   Alert,
   TouchableOpacity,
   Text,
+  Image,
+  FlatList,
 } from "react-native";
 import { SignUpForm } from "./screens/SignUpScreen";
 import { LoginForm } from "./screens/LogInScreen";
@@ -100,6 +102,8 @@ export default function App() {
   useEffect(() => {
     getData();
   }, []);
+
+  const [catTexts, setCatTexts] = useState(["Meow"]);
 
   useEffect(() => {
     console.log("USER", user);
@@ -189,6 +193,24 @@ export default function App() {
   }, [userId]);
   const navigationRef = useRef() as React.MutableRefObject<any>;
   const [menuVisible, setMenuVisible] = useState(false);
+  const [catVisible, setCatVisible] = useState(true);
+
+  async function catFunction() {
+    console.log("cat function called");
+    const yooo = await axios.get(
+      `http://${
+        EXPO_PUBLIC_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL
+      }/catgirl?prompt=The_user_says_hello`
+    );
+    const message = yooo.data.message;
+    console.log("MESAGE", message);
+    setCatTexts((prev) => [...prev, message]);
+    console.log(yooo);
+  }
+
+  useEffect(() => {
+    console.log("cattexts updated", catTexts);
+  }, [catTexts]);
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator initialRouteName="Home">
@@ -227,12 +249,6 @@ export default function App() {
         </Stack.Screen>
       </Stack.Navigator>
       <View style={styles.menuContainer}>
-        <TouchableOpacity
-          style={styles.menuButton}
-          onPress={() => setMenuVisible(!menuVisible)}
-        >
-          <Text style={styles.menuButtonText}>Menu</Text>
-        </TouchableOpacity>
         {menuVisible && (
           <View style={styles.menu}>
             <Button
@@ -258,6 +274,40 @@ export default function App() {
             />
           </View>
         )}
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => setMenuVisible(!menuVisible)}
+        >
+          <Text style={styles.menuButtonText}>Menu</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles3.menuContainer}>
+        {catVisible && (
+          <View style={styles.menu}>
+            <Text>Catgirl</Text>
+            <FlatList
+              data={catTexts}
+              keyExtractor={(item) => `yoo555 ${Math.random()}`}
+              renderItem={({ item }) => (
+                <View style={styles.transactionRow}>
+                  <Text style={styles.transactionText}>{item}</Text>
+                </View>
+              )}
+            />
+          </View>
+        )}
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => setCatVisible((prev) => !prev)}
+          onPressIn={() => catFunction()}
+        >
+          <Image
+            source={require("./assets/cat.jpg")}
+            style={{ width: 100, height: 100 }}
+          />
+          <Text style={styles.menuButtonText}>Say hi</Text>
+        </TouchableOpacity>
       </View>
     </NavigationContainer>
   );
@@ -268,6 +318,44 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 20,
     left: 10,
+    zIndex: 1,
+  },
+  menuButton: {
+    backgroundColor: "#007bff",
+    padding: 10,
+    borderRadius: 20,
+  },
+  menuButtonText: {
+    color: "#ffffff",
+    textAlign: "center",
+  },
+  transactionText: {
+    fontSize: 16,
+  },
+  menu: {
+    marginTop: 5,
+  },
+  transactionsHeader: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  transactionRow: {
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+  },
+});
+
+const styles3 = StyleSheet.create({
+  menuContainer: {
+    backgroundColor: "white",
+    borderRadius: 5,
+    padding: 5,
+    position: "absolute",
+    bottom: 20,
+    right: 10,
     zIndex: 1,
   },
   menuButton: {
