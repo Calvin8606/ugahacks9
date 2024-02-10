@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="89ce1314-a641-4d99-8e74-9cc74546db23" name="Changes" comment="" />
+    <list default="true" id="89ce1314-a641-4d99-8e74-9cc74546db23" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/app/screens/LogInScreen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/assets/adaptive-icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/assets/icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/assets/splash.png" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,6 +25,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="2c9sRfCNB7WWXj852HEk3SRcHME" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -25,6 +37,7 @@
     "RunOnceActivity.cidr.known.project.marker": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "master",
     "last_opened_file_path": "C:/Users/untin/Documents/GitHub/hacks/ugahacks9/app"
   }
 }]]></component>

@@ -1,5 +1,5 @@
 // App.js
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./screens/HomeScreen";
@@ -7,6 +7,7 @@ import AddFundsScreen from "./screens/AddFundsScreen";
 import RemoveFundsScreen from "./screens/RemoveFundsScreen";
 import { View, TextInput, Button, StyleSheet, Alert } from "react-native";
 import { SignUpForm } from "./screens/SignUpScreen";
+import { LoginForm } from "./screens/LogInScreen";
 // @ts-ignore
 import { EXPO_PUBLIC_BACKEND_URL } from "@env";
 import axios from "axios";
