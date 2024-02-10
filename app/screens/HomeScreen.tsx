@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Button, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  SafeAreaView,
+  ScrollView,
+} from "react-native";
 import { Deposit, Transaction, User, Withdraw } from "../App";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
@@ -10,9 +19,10 @@ interface Props {
   user: User;
   setUserId: Function;
   setUser: Function;
+  re: number;
 }
 
-export const HomeScreen = ({ user, setUserId, setUser }: Props) => {
+export const HomeScreen = ({ user, setUserId, setUser, re }: Props) => {
   useEffect(() => {
     if (user.account) {
       axios
@@ -89,7 +99,7 @@ export const HomeScreen = ({ user, setUserId, setUser }: Props) => {
           }));
         });
     }
-  }, [user.account]);
+  }, [user.account, re]);
   interface roww {
     _id: string;
     amount: number;
@@ -122,6 +132,28 @@ export const HomeScreen = ({ user, setUserId, setUser }: Props) => {
       setRows(sortedRows);
     }
   }, [user]);
+
+  const styles2 = StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+    scrollView: {
+      flex: 1,
+      backgroundColor: "pink",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  });
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+
+    // Simulate a network request for demonstration purposes
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+  const [refreshing, setRefreshing] = useState(false);
   return (
     <View style={styles.container}>
       <Text style={styles.balanceText}>Welcome {user.first_name}</Text>

@@ -7,9 +7,10 @@ import { EXPO_PUBLIC_BACKEND_URL } from "@env";
 interface Props {
   user: User;
   setUser?: Function;
+  setRe: Function;
 }
 
-export const DepositScreen = ({ user, setUser }: Props) => {
+export const DepositScreen = ({ user, setUser, setRe }: Props) => {
   const [amount, setAmount] = useState("");
   function getCurrentDateFormatted(): string {
     const now = new Date();
@@ -42,6 +43,9 @@ export const DepositScreen = ({ user, setUser }: Props) => {
         }
       )
       .then((res: any) => {
+        setRe((prev: number) => {
+          prev + 1;
+        });
         console.log("eeee69", res);
       });
   };

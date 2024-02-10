@@ -15,6 +15,7 @@ import {
   Text,
   Image,
   FlatList,
+  RefreshControl,
 } from "react-native";
 import { SignUpForm } from "./screens/SignUpScreen";
 import { LoginForm } from "./screens/LogInScreen";
@@ -286,6 +287,9 @@ export default function App() {
     console.log(resultl, "API REQs");
     catFunction(resultl.replace(" ", "_"));
   }, [user]);
+
+  const [re, setRe] = useState(1);
+
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator initialRouteName="Home">
@@ -294,7 +298,12 @@ export default function App() {
             return !user?.account ? (
               <SignUpForm setUserId={setUserId} userId={userId} />
             ) : (
-              <HomeScreen setUser={setUser} setUserId={setUserId} user={user} />
+              <HomeScreen
+                re={re}
+                setUser={setUser}
+                setUserId={setUserId}
+                user={user}
+              />
             );
           }}
         </Stack.Screen>
@@ -307,7 +316,7 @@ export default function App() {
         <Stack.Screen name="Deposit">
           {(props) => {
             return user?.account ? (
-              <DepositScreen {...props} user={user} />
+              <DepositScreen setRe={setRe} {...props} user={user} />
             ) : (
               <SignUpForm setUserId={setUser} userId={userId}></SignUpForm>
             );
@@ -316,7 +325,7 @@ export default function App() {
         <Stack.Screen name="Withdraw">
           {(props) => {
             return user?.account ? (
-              <WithdrawScreen {...props} user={user} />
+              <WithdrawScreen setRe={setRe} {...props} user={user} />
             ) : (
               <SignUpForm setUserId={setUser} userId={userId}></SignUpForm>
             );
@@ -347,6 +356,19 @@ export default function App() {
                 // Navigation code for Remove Funds
               }}
             />
+            {/* <Button
+              title="Refresh"
+              onPress={() => {
+                <Button
+                  title="Home"
+                  onPress={() => {
+                    navigationRef.current?.navigate("Home");
+                    // Navigation code for Remove Funds
+                  }}
+                />;
+                // Navigation code for Remove Funds
+              }}
+            /> */}
           </View>
         )}
         <TouchableOpacity
