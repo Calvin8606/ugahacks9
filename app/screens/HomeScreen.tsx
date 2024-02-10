@@ -11,6 +11,9 @@ export const HomeScreen = ({ user, setUserId }: props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.balanceText}>Welcome {user.first_name}</Text>
+      {user.account && (
+        <Text style={styles.balanceText}>balance ${user.account.balance}</Text>
+      )}
       <View style={styles.buttonContainer}>
         <Button
           title="Log out"
