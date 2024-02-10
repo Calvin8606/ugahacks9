@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import {
   View,
+  Text,
   TextInput,
   Button,
   StyleSheet,
@@ -27,7 +28,7 @@ interface props {
   userId: string;
 }
 
-export const SignUpForm = ({ setUserId,userId}: props) => {
+export const SignUpForm = ({ setUserId, userId }: props) => {
   const [formData, setFormData] = useState<SignUpFormData>({
     first_name: "Evan",
     last_name: "Hanson",
@@ -69,7 +70,7 @@ export const SignUpForm = ({ setUserId,userId}: props) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <div>{userId}</div>
+      <Text>{userId}</Text>
       <TextInput
         style={styles.input}
         placeholder="First Name"
