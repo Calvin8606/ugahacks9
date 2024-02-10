@@ -1,21 +1,17 @@
 import React from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
+import { User } from "../App";
+interface props {
+  user: User;
+}
 
-function HomeScreen({ navigation, balance }) {
+export const HomeScreen = ({ user }: props) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.balanceText}>Current Balance: ${balance}</Text>
-      <Button
-        title="Add Funds"
-        onPress={() => navigation.navigate("Add Funds")}
-      />
-      <Button
-        title="Remove Funds"
-        onPress={() => navigation.navigate("Remove Funds")}
-      />
+      <Text style={styles.balanceText}>Welcome {user.first_name}</Text>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -9,7 +9,8 @@ import {
   Alert,
   ScrollView,
 } from "react-native";
-
+// @ts-ignore
+import { EXPO_PUBLIC_BACKEND_URL } from "@env";
 interface Address {
   street_number: string;
   street_name: string;
@@ -46,7 +47,9 @@ export const SignUpForm = ({ setUserId, userId }: props) => {
       console.log("form data", formData);
       axios
         .post(
-          `http://${process.env.EXPO_PUBLIC_BACKEND_URL}/nessie?url=http://api.nessieisreal.com/customers/?key=bf8433e4df1dc693db643a4926845cbb&method=POST`,
+          `http://${
+            EXPO_PUBLIC_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL
+          }/nessie?url=http://api.nessieisreal.com/customers/?key=bf8433e4df1dc693db643a4926845cbb&method=POST`,
           formData
         )
         .then((response) => {
