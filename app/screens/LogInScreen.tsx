@@ -1,29 +1,34 @@
 // Import necessary components and hooks
-import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import axios from 'axios';
+import React, { useState } from "react";
+import { View, TextInput, Button, StyleSheet, Alert } from "react-native";
+import axios from "axios";
+interface props {
+  setLos: Function;
+}
 
-const LoginForm = () => {
+export const LoginForm = ({ setLos }: props) => {
   // State to store input values
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [customerId, setCustomerId] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [customerId, setCustomerId] = useState("");
 
   // Function to handle form submission
   const handleSubmit = async () => {
     try {
       // Make a POST request with the form data
-      const response = await axios
-      .post(`http://${process.env.EXPO_PUBLIC_BACKEND_URL}/nessie?url=http://api.nessieisreal.com/customers/?key=bf8433e4df1dc693db643a4926845cbb&method=POST`, {
-        first_name: firstName,
-        last_name: lastName,
-        _id: customerId,
-      });
+      const response = await axios.post(
+        `http://${process.env.EXPO_PUBLIC_BACKEND_URL}/nessie?url=http://api.nessieisreal.com/customers/?key=bf8433e4df1dc693db643a4926845cbb&method=POST`,
+        {
+          first_name: firstName,
+          last_name: lastName,
+          _id: customerId,
+        }
+      );
       // Handle success
-      Alert.alert('Success', 'You have logged in successfully!');
+      Alert.alert("Success", "You have logged in successfully!");
     } catch (error) {
       // Handle error
-      Alert.alert('Error', 'There was an issue with your login.');
+      Alert.alert("Error", "There was an issue with your login.");
       console.error(error);
     }
   };
@@ -50,6 +55,10 @@ const LoginForm = () => {
         keyboardType="numeric"
       />
       <Button title="Log In" onPress={handleSubmit} />
+      <Button
+        title="Sign up"
+        onPress={() => setLos(1)} // Update state on button click
+      />
     </View>
   );
 };
@@ -58,7 +67,7 @@ const LoginForm = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 20,
   },
   input: {

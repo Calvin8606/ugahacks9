@@ -11,6 +11,7 @@ import {
 } from "react-native";
 // @ts-ignore
 import { EXPO_PUBLIC_BACKEND_URL } from "@env";
+import LoginForm from "./LogInScreen";
 interface Address {
   street_number: string;
   street_name: string;
@@ -41,6 +42,7 @@ export const SignUpForm = ({ setUserId, userId }: props) => {
       zip: "30677",
     },
   });
+  const [los, setLos] = useState(1);
 
   const handleSubmit = async () => {
     try {
@@ -72,78 +74,93 @@ export const SignUpForm = ({ setUserId, userId }: props) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text>{userId}</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="First Name"
-        value={formData.first_name}
-        onChangeText={(text) => setFormData({ ...formData, first_name: text })}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Last Name"
-        value={formData.last_name}
-        onChangeText={(text) => setFormData({ ...formData, last_name: text })}
-      />
-      {/* Address Inputs */}
-      <TextInput
-        style={styles.input}
-        placeholder="Street Number"
-        value={formData.address.street_number}
-        onChangeText={(text) =>
-          setFormData({
-            ...formData,
-            address: { ...formData.address, street_number: text },
-          })
-        }
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Street Name"
-        value={formData.address.street_name}
-        onChangeText={(text) =>
-          setFormData({
-            ...formData,
-            address: { ...formData.address, street_name: text },
-          })
-        }
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="City"
-        value={formData.address.city}
-        onChangeText={(text) =>
-          setFormData({
-            ...formData,
-            address: { ...formData.address, city: text },
-          })
-        }
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="State"
-        value={formData.address.state}
-        onChangeText={(text) =>
-          setFormData({
-            ...formData,
-            address: { ...formData.address, state: text },
-          })
-        }
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Zip Code"
-        value={formData.address.zip}
-        onChangeText={(text) =>
-          setFormData({
-            ...formData,
-            address: { ...formData.address, zip: text },
-          })
-        }
-      />
-      <Button title="Sign Up" onPress={handleSubmit} />
-    </ScrollView>
+    <>
+      {" "}
+      {los === 1 ? (
+        <ScrollView contentContainerStyle={styles.container}>
+          <Text>{userId}</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="First Name"
+            value={formData.first_name}
+            onChangeText={(text) =>
+              setFormData({ ...formData, first_name: text })
+            }
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Last Name"
+            value={formData.last_name}
+            onChangeText={(text) =>
+              setFormData({ ...formData, last_name: text })
+            }
+          />
+          {/* Address Inputs */}
+          <TextInput
+            style={styles.input}
+            placeholder="Street Number"
+            value={formData.address.street_number}
+            onChangeText={(text) =>
+              setFormData({
+                ...formData,
+                address: { ...formData.address, street_number: text },
+              })
+            }
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Street Name"
+            value={formData.address.street_name}
+            onChangeText={(text) =>
+              setFormData({
+                ...formData,
+                address: { ...formData.address, street_name: text },
+              })
+            }
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="City"
+            value={formData.address.city}
+            onChangeText={(text) =>
+              setFormData({
+                ...formData,
+                address: { ...formData.address, city: text },
+              })
+            }
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="State"
+            value={formData.address.state}
+            onChangeText={(text) =>
+              setFormData({
+                ...formData,
+                address: { ...formData.address, state: text },
+              })
+            }
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Zip Code"
+            value={formData.address.zip}
+            onChangeText={(text) =>
+              setFormData({
+                ...formData,
+                address: { ...formData.address, zip: text },
+              })
+            }
+          />
+          <Button title="Sign Up" onPress={handleSubmit} />
+          <Button
+            title="Already have an account? Login"
+            onPress={() => setLos(2)} // Update state on button click
+          />
+        </ScrollView>
+      ) : (
+        <LoginForm setLos={setLos} />
+      )}
+    </>
   );
 };
 
