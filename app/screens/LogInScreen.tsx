@@ -4,9 +4,10 @@ import { View, TextInput, Button, StyleSheet, Alert } from "react-native";
 import axios from "axios";
 interface props {
   setLos: Function;
+  setUserId: Function;
 }
 
-export const LoginForm = ({ setLos }: props) => {
+export const LoginForm = ({ setLos, setUserId }: props) => {
   // State to store input values
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -54,11 +55,13 @@ export const LoginForm = ({ setLos }: props) => {
         style={styles.input}
         keyboardType="numeric"
       />
-      <Button title="Log In" onPress={handleSubmit} />
-      <Button
-        title="Sign up"
-        onPress={() => setLos(1)} // Update state on button click
-      />
+      <View style={styles.buttonContainer}>
+        <Button title="Log In" onPress={handleSubmit} />
+        <Button
+          title="need an account? Sign up"
+          onPress={() => setLos(1)} // Update state on button click
+        />
+      </View>
     </View>
   );
 };
@@ -75,6 +78,10 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
     padding: 10,
+  },
+  buttonContainer: {
+    gap: 5,
+    marginBottom: 12,
   },
 });
 

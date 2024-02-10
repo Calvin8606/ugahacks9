@@ -75,7 +75,6 @@ export const SignUpForm = ({ setUserId, userId }: props) => {
 
   return (
     <>
-
       {los === 1 ? (
         <ScrollView contentContainerStyle={styles.container}>
           <Text>{userId}</Text>
@@ -151,14 +150,16 @@ export const SignUpForm = ({ setUserId, userId }: props) => {
               })
             }
           />
-          <Button title="Sign Up" onPress={handleSubmit} />
-          <Button
-            title="Already have an account? Login"
-            onPress={() => setLos(2)} // Update state on button click
-          />
+          <View style={styles.buttonContainer}>
+            <Button title="Create account" onPress={handleSubmit} />
+            <Button
+              title="already have an account? Log in"
+              onPress={() => setLos(2)} // Update state on button click
+            />
+          </View>
         </ScrollView>
       ) : (
-        <LoginForm setLos={setLos} />
+        <LoginForm setUserId={setUserId} setLos={setLos} />
       )}
     </>
   );
@@ -173,5 +174,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
     padding: 10,
+  },
+  buttonContainer: {
+    gap: 5,
+    marginBottom: 12,
   },
 });
