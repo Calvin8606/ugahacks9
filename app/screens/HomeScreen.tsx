@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Button, StyleSheet, FlatList } from "react-native";
 import { Deposit, Transaction, User, Withdraw } from "../App";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -90,7 +90,35 @@ export const HomeScreen = ({ user, setUserId, setUser }: Props) => {
         });
     }
   }, [user.account]);
+  interface roww {
+    _id: string;
+    amount: number;
+    type: string;
+    date: string;
+  }
+  type row = { type: string; amount: string; date: string };
+  const [rows, setRows] = useState<roww[]>();
+  useEffect(() => {
+    if (user.withdrawals && user.deposits) {
+      const withdraws = user?.withdrawals.map((withd) => {
+        return {
+          type: "withdraw",
+          amount: withd.amount,
+          date: withd.transaction_date,
+        } as roww;
+      });
 
+      const deposits = user?.deposits.map((withd) => {
+        return {
+          type: "deposit",
+          amount: withd.amount,
+          date: withd.transaction_date,
+        } as roww;
+      });
+
+      setRows([...deposits, ...withdraws]);
+    }
+  }, [user]);
   return (
     <View style={styles.container}>
       <Text style={styles.balanceText}>Welcome {user.first_name}</Text>
@@ -99,12 +127,12 @@ export const HomeScreen = ({ user, setUserId, setUser }: Props) => {
       )}
       <Text style={styles.transactionsHeader}>Transactions</Text>
       <FlatList
-        data={user.deposits}
-        keyExtractor={(item) => item._id}
+        data={rows}
+        keyExtractor={(item) => `yoo ${Math.random()}`}
         renderItem={({ item }) => (
           <View style={styles.transactionRow}>
             <Text style={styles.transactionText}>
-              {item.transaction_date}: ${item.amount}
+              {item.type} - {item.date}: ${item.amount}
             </Text>
           </View>
         )}
