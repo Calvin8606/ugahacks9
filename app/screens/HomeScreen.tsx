@@ -129,14 +129,30 @@ export const HomeScreen = ({ user, setUserId, setUser }: Props) => {
       <FlatList
         data={rows}
         keyExtractor={(item) => `yoo ${Math.random()}`}
-        renderItem={({ item }) => (
-          <View style={styles.transactionRow}>
-            <Text style={styles.transactionText}>
-              {item.type} - {item.date}: ${item.amount}
-            </Text>
-          </View>
-        )}
+        renderItem={({ item }) => {
+          // Capitalize the first letter and replace 'withdraw' with 'Withdraw' and 'deposit' with 'Deposit'
+          const transactionType =
+            item.type === 'withdraw'
+              ? 'Withdraw'
+              : item.type === 'deposit'
+              ? 'Deposit'
+              : item.type; // Adjust as needed for other types, if any
+
+          return (
+            <View style={styles.transactionRow}>
+              <Text
+                style={[
+                  styles.transactionText,
+                  item.type === 'deposit' ? styles.depositText : styles.withdrawText,
+                ]}
+              >
+                {transactionType} - {item.date}: ${item.amount}
+              </Text>
+            </View>
+          );
+        }}
       />
+
       <View style={styles.buttonContainer}>
         <Button
           title="Log out"
@@ -181,6 +197,15 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: "center",
   },
+  transactionText: {
+      fontSize: 16,
+    },
+    depositText: {
+      color: 'green', // Choose a color for deposits
+    },
+    withdrawText: {
+      color: 'red', // Choose a color for withdrawals
+    },
 });
 
 export default HomeScreen;
