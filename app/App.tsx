@@ -80,7 +80,7 @@ export interface User {
   deposits: Deposit[];
   withdrawals: Withdraw[];
   transactionsTo: Transaction[];
-  transactionsFrom: Transaction[];t
+  transactionsFrom: Transaction[];
 }
 export default function App() {
   const [balance, setBalance] = useState(100); // Starting balance
@@ -103,7 +103,7 @@ export default function App() {
     getData();
   }, []);
 
-  const [catTexts, setCatTexts] = useState(["Meow"]);
+  const [catTexts, setCatTexts] = useState(["Meow! Hi nya"]);
 
   useEffect(() => {
     console.log("USER", user);
@@ -285,7 +285,6 @@ export default function App() {
       <View style={styles3.menuContainer}>
         {catVisible && (
           <View style={styles.menu}>
-            <Text>Catgirl</Text>
             <FlatList
               data={catTexts}
               keyExtractor={(item) => `yoo555 ${Math.random()}`}
@@ -299,14 +298,18 @@ export default function App() {
         )}
         <TouchableOpacity
           style={styles.menuButton}
-          onPress={() => setCatVisible((prev) => !prev)}
-          onPressIn={() => catFunction()}
+          onPress={() => catFunction()}
         >
           <Image
             source={require("./assets/cat.jpg")}
             style={{ width: 100, height: 100 }}
           />
-          <Text style={styles.menuButtonText}>Say hi</Text>
+          <Text
+            onPress={() => setCatVisible((prev) => !prev)}
+            style={styles.menuButtonText}
+          >
+            Hide
+          </Text>
         </TouchableOpacity>
       </View>
     </NavigationContainer>
@@ -350,6 +353,8 @@ const styles = StyleSheet.create({
 
 const styles3 = StyleSheet.create({
   menuContainer: {
+    display: "flex",
+    maxWidth: 200,
     backgroundColor: "white",
     borderRadius: 5,
     padding: 5,

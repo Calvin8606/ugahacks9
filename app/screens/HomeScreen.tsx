@@ -116,7 +116,10 @@ export const HomeScreen = ({ user, setUserId, setUser }: Props) => {
         } as roww;
       });
 
-      setRows([...deposits, ...withdraws]);
+      const sortedRows = [...deposits, ...withdraws].sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+      );
+      setRows(sortedRows);
     }
   }, [user]);
   return (
@@ -132,10 +135,10 @@ export const HomeScreen = ({ user, setUserId, setUser }: Props) => {
         renderItem={({ item }) => {
           // Capitalize the first letter and replace 'withdraw' with 'Withdraw' and 'deposit' with 'Deposit'
           const transactionType =
-            item.type === 'withdraw'
-              ? 'Withdraw'
-              : item.type === 'deposit'
-              ? 'Deposit'
+            item.type === "withdraw"
+              ? "Withdraw"
+              : item.type === "deposit"
+              ? "Deposit"
               : item.type; // Adjust as needed for other types, if any
 
           return (
@@ -143,7 +146,9 @@ export const HomeScreen = ({ user, setUserId, setUser }: Props) => {
               <Text
                 style={[
                   styles.transactionText,
-                  item.type === 'deposit' ? styles.depositText : styles.withdrawText,
+                  item.type === "deposit"
+                    ? styles.depositText
+                    : styles.withdrawText,
                 ]}
               >
                 {transactionType} - {item.date}: ${item.amount}
@@ -197,15 +202,12 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: "center",
   },
-  transactionText: {
-      fontSize: 16,
-    },
-    depositText: {
-      color: 'green', // Choose a color for deposits
-    },
-    withdrawText: {
-      color: 'red', // Choose a color for withdrawals
-    },
+  depositText: {
+    color: "green", // Choose a color for deposits
+  },
+  withdrawText: {
+    color: "red", // Choose a color for withdrawals
+  },
 });
 
 export default HomeScreen;
