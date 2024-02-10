@@ -46,7 +46,7 @@ export const SignUpForm = ({ setUserId, userId }: props) => {
       console.log("form data", formData);
       axios
         .post(
-          "http://localhost:3000/nessie?url=http://api.nessieisreal.com/customers/?key=bf8433e4df1dc693db643a4926845cbb&method=POST",
+          `http://${process.env.EXPO_PUBLIC_BACKEND_URL}/nessie?url=http://api.nessieisreal.com/customers/?key=bf8433e4df1dc693db643a4926845cbb&method=POST`,
           formData
         )
         .then((response) => {
