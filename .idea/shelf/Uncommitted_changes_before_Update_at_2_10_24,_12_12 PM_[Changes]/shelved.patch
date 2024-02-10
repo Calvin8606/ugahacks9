@@ -1,0 +1,178 @@
+Index: app/App.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// App.js\nimport React, { useState } from \"react\";\nimport { NavigationContainer } from \"@react-navigation/native\";\nimport { createNativeStackNavigator } from \"@react-navigation/native-stack\";\nimport HomeScreen from \"./screens/HomeScreen\";\nimport AddFundsScreen from \"./screens/AddFundsScreen\";\nimport RemoveFundsScreen from \"./screens/RemoveFundsScreen\";\nimport { View, TextInput, Button, StyleSheet, Alert } from \"react-native\";\nimport { SignUpForm } from \"./screens/SignUpScreen\";\n\nconst Stack = createNativeStackNavigator();\n\nexport default function App() {\n  const [balance, setBalance] = useState(100); // Starting balance\n  const [userId, setUserId] = useState(\"none\");\n\n  return (\n    <NavigationContainer>\n      <Stack.Navigator initialRouteName=\"Home\">\n        <Stack.Screen name=\"Home\">\n          {(props) => <SignUpForm setUserId={setUserId} userId={userId} />}\n        </Stack.Screen>\n        <Stack.Screen name=\"user\">\n          {(props) => <HomeScreen {...props} balance={balance} />}\n        </Stack.Screen>\n        <Stack.Screen name=\"Add Funds\">\n          {(props) => <AddFundsScreen {...props} setBalance={setBalance} />}\n        </Stack.Screen>\n        <Stack.Screen name=\"Remove Funds\">\n          {(props) => <RemoveFundsScreen {...props} setBalance={setBalance} />}\n        </Stack.Screen>\n      </Stack.Navigator>\n    </NavigationContainer>\n  );\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/App.tsx b/app/App.tsx
+--- a/app/App.tsx	(revision b8e56b6741745e656265a0da352a04781ec8a6b1)
++++ b/app/App.tsx	(date 1707583574141)
+@@ -7,6 +7,7 @@
+ import RemoveFundsScreen from "./screens/RemoveFundsScreen";
+ import { View, TextInput, Button, StyleSheet, Alert } from "react-native";
+ import { SignUpForm } from "./screens/SignUpScreen";
++import { LoginForm } from "./screens/LogInScreen";
+ 
+ const Stack = createNativeStackNavigator();
+ 
+Index: app/app.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\n  \"expo\": {\n    \"name\": \"ugahacks9\",\n    \"slug\": \"ugahacks9\",\n    \"version\": \"1.0.0\",\n    \"orientation\": \"portrait\",\n    \"icon\": \"./assets/icon.png\",\n    \"userInterfaceStyle\": \"light\",\n    \"splash\": {\n      \"image\": \"./assets/splash.png\",\n      \"resizeMode\": \"contain\",\n      \"backgroundColor\": \"#ffffff\"\n    },\n    \"assetBundlePatterns\": [\n      \"**/*\"\n    ],\n    \"ios\": {\n      \"supportsTablet\": true\n    },\n    \"android\": {\n      \"adaptiveIcon\": {\n        \"foregroundImage\": \"./assets/adaptive-icon.png\",\n        \"backgroundColor\": \"#ffffff\"\n      }\n    },\n    \"web\": {\n      \"favicon\": \"./assets/favicon.png\"\n    }\n  }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/app.json b/app/app.json
+--- a/app/app.json	(revision b8e56b6741745e656265a0da352a04781ec8a6b1)
++++ b/app/app.json	(date 1707581052819)
+@@ -4,10 +4,10 @@
+     "slug": "ugahacks9",
+     "version": "1.0.0",
+     "orientation": "portrait",
+-    "icon": "./assets/icon.png",
++    "icon": "./assets/bank_icon.png",
+     "userInterfaceStyle": "light",
+     "splash": {
+-      "image": "./assets/splash.png",
++      "image": "./assets/splash_bank_icon.png",
+       "resizeMode": "contain",
+       "backgroundColor": "#ffffff"
+     },
+@@ -19,7 +19,7 @@
+     },
+     "android": {
+       "adaptiveIcon": {
+-        "foregroundImage": "./assets/adaptive-icon.png",
++        "foregroundImage": "./assets/adaptive_bank_icon.png",
+         "backgroundColor": "#ffffff"
+       }
+     },
+Index: app/screens/LogInScreen.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/screens/LogInScreen.tsx b/app/screens/LogInScreen.tsx
+new file mode 100644
+--- /dev/null	(date 1707584103916)
++++ b/app/screens/LogInScreen.tsx	(date 1707584103916)
+@@ -0,0 +1,72 @@
++// Import necessary components and hooks
++import React, { useState } from 'react';
++import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
++import axios from 'axios';
++
++const LoginForm = () => {
++  // State to store input values
++  const [firstName, setFirstName] = useState('');
++  const [lastName, setLastName] = useState('');
++  const [customerId, setCustomerId] = useState('');
++
++  // Function to handle form submission
++  const handleSubmit = async () => {
++    try {
++      // Make a POST request with the form data
++      const response = await axios
++      .post(`http://${process.env.EXPO_PUBLIC_BACKEND_URL}/nessie?url=http://api.nessieisreal.com/customers/?key=bf8433e4df1dc693db643a4926845cbb&method=POST`, {
++        first_name: firstName,
++        last_name: lastName,
++        _id: customerId,
++      });
++      // Handle success
++      Alert.alert('Success', 'You have logged in successfully!');
++    } catch (error) {
++      // Handle error
++      Alert.alert('Error', 'There was an issue with your login.');
++      console.error(error);
++    }
++  };
++
++  return (
++    <View style={styles.container}>
++      <TextInput
++        placeholder="First Name"
++        value={firstName}
++        onChangeText={setFirstName}
++        style={styles.input}
++      />
++      <TextInput
++        placeholder="Last Name"
++        value={lastName}
++        onChangeText={setLastName}
++        style={styles.input}
++      />
++      <TextInput
++        placeholder="Customer ID"
++        value={customerId}
++        onChangeText={setCustomerId}
++        style={styles.input}
++        keyboardType="numeric"
++      />
++      <Button title="Log In" onPress={handleSubmit} />
++    </View>
++  );
++};
++
++// Styles for the form
++const styles = StyleSheet.create({
++  container: {
++    flex: 1,
++    justifyContent: 'center',
++    padding: 20,
++  },
++  input: {
++    height: 40,
++    marginBottom: 12,
++    borderWidth: 1,
++    padding: 10,
++  },
++});
++
++export default LoginForm;
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"89ce1314-a641-4d99-8e74-9cc74546db23\" name=\"Changes\" comment=\"\" />\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"ClangdSettings\">\n    <option name=\"formatViaClangd\" value=\"false\" />\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"ProjectId\" id=\"2c9sRfCNB7WWXj852HEk3SRcHME\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\"><![CDATA[{\n  \"keyToString\": {\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\n    \"RunOnceActivity.cidr.known.project.marker\": \"true\",\n    \"cf.first.check.clang-format\": \"false\",\n    \"cidr.known.project.marker\": \"true\",\n    \"last_opened_file_path\": \"C:/Users/untin/Documents/GitHub/hacks/ugahacks9/app\"\n  }\n}]]></component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"89ce1314-a641-4d99-8e74-9cc74546db23\" name=\"Changes\" comment=\"\" />\n      <created>1707535125147</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1707535125147</updated>\n    </task>\n    <servers />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision b8e56b6741745e656265a0da352a04781ec8a6b1)
++++ b/.idea/workspace.xml	(date 1707583574519)
+@@ -1,7 +1,18 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="AutoImportSettings">
++    <option name="autoReloadType" value="NONE" />
++  </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="89ce1314-a641-4d99-8e74-9cc74546db23" name="Changes" comment="" />
++    <list default="true" id="89ce1314-a641-4d99-8e74-9cc74546db23" name="Changes" comment="">
++      <change afterPath="$PROJECT_DIR$/app/screens/LogInScreen.tsx" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/App.tsx" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.json" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/assets/adaptive-icon.png" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/assets/icon.png" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/assets/splash.png" beforeDir="false" />
++    </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+@@ -14,6 +25,7 @@
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+   <component name="ProjectId" id="2c9sRfCNB7WWXj852HEk3SRcHME" />
++  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+   <component name="ProjectViewState">
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+@@ -25,6 +37,7 @@
+     "RunOnceActivity.cidr.known.project.marker": "true",
+     "cf.first.check.clang-format": "false",
+     "cidr.known.project.marker": "true",
++    "git-widget-placeholder": "master",
+     "last_opened_file_path": "C:/Users/untin/Documents/GitHub/hacks/ugahacks9/app"
+   }
+ }]]></component>
