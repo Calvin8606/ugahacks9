@@ -195,12 +195,12 @@ export default function App() {
   const [menuVisible, setMenuVisible] = useState(false);
   const [catVisible, setCatVisible] = useState(true);
 
-  async function catFunction() {
+  async function catFunction(promp = "The_user_says_hello") {
     console.log("cat function called");
     const yooo = await axios.get(
       `http://${
         EXPO_PUBLIC_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL
-      }/catgirl?prompt=The_user_says_hello`
+      }/catgirl?prompt=${promp}`
     );
     const message = yooo.data.message;
     console.log("MESAGE", message);
@@ -211,6 +211,81 @@ export default function App() {
   useEffect(() => {
     console.log("cattexts updated", catTexts);
   }, [catTexts]);
+
+  useEffect(() => {
+    console.log("START HERE");
+    interface Transaction2 {
+      _id: string;
+      medium: string;
+      transaction_date: string; // Assuming this is a string in the format YYYY-MM-DD
+      status: string;
+      description: string;
+      amount: number;
+      payee_id: string;
+      type: "deposit" | "withdraw";
+    }
+    type Transaction = Deposit | Withdraw;
+    function analyzeSpending(transactions: Transaction[]): string {
+      let netBalance = 0;
+      let monthlyChanges = new Map<string, number>(); // To track net change per month
+
+      transactions.forEach((transaction) => {
+        const isWithdraw = transaction.type === "withdraw";
+        // Update net balance
+        netBalance += isWithdraw ? -transaction.amount : transaction.amount;
+
+        // Track monthly net change
+        const date = new Date(transaction.transaction_date);
+        const monthYear = date.toLocaleDateString("default", {
+          month: "short",
+          year: "numeric",
+        });
+        const currentChange = monthlyChanges.get(monthYear) || 0;
+        monthlyChanges.set(
+          monthYear,
+          isWithdraw
+            ? currentChange - transaction.amount
+            : currentChange + transaction.amount
+        );
+      });
+
+      // Analyze trend
+      let spendingTooMuch = false;
+      console.log("spending", spendingTooMuch);
+      let doingWell = false;
+      let previousChange = 0;
+      monthlyChanges.forEach((change, _) => {
+        if (change < previousChange) {
+          spendingTooMuch = true;
+        } else if (change > previousChange) {
+          doingWell = true;
+        }
+        previousChange = change;
+      });
+
+      // Determine final verdict
+      if (spendingTooMuch && !doingWell) {
+        return "User has been spending too much over time.";
+      } else if (!spendingTooMuch && doingWell) {
+        return "User is doing well over time.";
+      } else {
+        return "User's spending is fluctuating over time.";
+      }
+    }
+    console.log(
+      "TESTING",
+      user,
+      !user?.account,
+      !user?.withdrawals,
+      user?.deposits
+    );
+    if (!user?.withdrawals || !user?.deposits) {
+      return;
+    }
+    const resultl = analyzeSpending([...user!.withdrawals, ...user!.deposits]);
+    console.log(resultl, "API REQs");
+    catFunction(resultl.replace(" ", "_"));
+  }, [user]);
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator initialRouteName="Home">
