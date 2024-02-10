@@ -11,7 +11,7 @@ import { LoginForm } from "./screens/LogInScreen";
 // @ts-ignore
 import { EXPO_PUBLIC_BACKEND_URL } from "@env";
 import axios from "axios";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const Stack = createNativeStackNavigator();
 interface Address {
   street_number: string;
@@ -31,8 +31,35 @@ export default function App() {
   const [balance, setBalance] = useState(100); // Starting balance
   const [userId, setUserId] = useState("");
   const [user, setUser] = useState<User | undefined>(undefined);
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("@storage_Key");
+      if (value !== null) {
+        console.log("key", await value);
+        setUserId(value);
+        // value previously stored
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   console.log(EXPO_PUBLIC_BACKEND_URL);
   useEffect(() => {
+    const storeData = async (value: string) => {
+      try {
+        await AsyncStorage.setItem("@storage_Key", value);
+        const value2 = await AsyncStorage.getItem("@storage_Key");
+        console.log("value4444", value2);
+      } catch (e) {
+        // saving error
+      }
+    };
+    storeData(userId);
     if (!userId) return;
     axios
       .get(

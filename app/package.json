@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@expo/webpack-config": "~19.0.1",
+    "@react-native-async-storage/async-storage": "^1.21.0",
     "@react-navigation/native": "^6.1.10",
     "@react-navigation/native-stack": "^6.9.18",
     "@types/react-native-dotenv": "^0.2.2",
