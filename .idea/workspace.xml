@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="89ce1314-a641-4d99-8e74-9cc74546db23" name="Changes" comment="added log in form">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/screens/LogInScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/screens/LogInScreen.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,7 +61,15 @@
       <option name="project" value="LOCAL" />
       <updated>1707586370569</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="added log in form">
+      <option name="closed" value="true" />
+      <created>1707587932330</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1707587932330</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

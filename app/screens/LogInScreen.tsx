@@ -13,25 +13,22 @@ export const LoginForm = ({ setLos, setUserId }: props) => {
   const [lastName, setLastName] = useState("");
   const [customerId, setCustomerId] = useState("");
 
- // Function to handle form submission
  const handleSubmit = async () => {
    try {
-     const response = await axios.post(
-       `http://${process.env.EXPO_PUBLIC_BACKEND_URL}/nessie?url=http://api.nessieisreal.com/customers/?key=bf8433e4df1dc693db643a4926845cbb&method=POST`,
-       {
-         first_name: firstName,
-         last_name: lastName,
-         _id: customerId,
-       }
-     );
-     // Assuming the backend response includes a field indicating success or specific error messages
+     // Construct the URL with query parameters
+     const url = `http://${process.env.EXPO_PUBLIC_BACKEND_URL}/nessie?url=http://api.nessieisreal.com/customers/?key=bf8433e4df1dc693db643a4926845cbb&method=GET&first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&customer_id=${encodeURIComponent(customerId)}`;
+
+     // Make a GET request
+     const response = await axios.get(url);
+
+     // Process the response
+     // Assuming the backend or your proxy handles the query and returns appropriate response
      if (response.data.success) {
-       Alert.alert("Success", "You have logged in successfully!");
-       // Optionally set user ID or other login success actions here
-       // setUserId(response.data.userId); // Example
+       Alert.alert("Success", "Login validation successful!");
+       // Perform actions on success, e.g., navigating to another screen or setting user context
      } else {
-       // Handle login failure based on backend response
-       Alert.alert("Login Failed", response.data.message || "Your login details did not match.");
+       // Handle case where user details do not match
+       Alert.alert("Login Failed", "No matching records found.");
      }
    } catch (error) {
      // Handle error
@@ -39,6 +36,7 @@ export const LoginForm = ({ setLos, setUserId }: props) => {
      console.error(error);
    }
  };
+
 
 
   return (
