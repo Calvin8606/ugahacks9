@@ -212,6 +212,7 @@ export default function App() {
   useEffect(() => {
     console.log("cattexts updated", catTexts);
   }, [catTexts]);
+  const [re, setRe] = useState(14123);
 
   useEffect(() => {
     console.log("START HERE");
@@ -286,9 +287,8 @@ export default function App() {
     const resultl = analyzeSpending([...user!.withdrawals, ...user!.deposits]);
     console.log(resultl, "API REQs");
     catFunction(resultl.replace(" ", "_"));
-  }, [user]);
+  }, [user, re]);
 
-  const [re, setRe] = useState(14123);
   useEffect(() => {
     console.log("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWww", re);
   }, [re]);
