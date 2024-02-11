@@ -25,6 +25,8 @@ app.get("/catgirl", async (req, res) => {
     console.log(promptResponse);
     res.send({ message: promptResponse });
   } catch (e) {
+    console.log(e);
+    console.log(e.message);
     res.send({ message: "Im very busy right now, try again later" });
   }
 });

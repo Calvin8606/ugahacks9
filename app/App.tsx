@@ -288,7 +288,10 @@ export default function App() {
     catFunction(resultl.replace(" ", "_"));
   }, [user]);
 
-  const [re, setRe] = useState(1);
+  const [re, setRe] = useState(14123);
+  useEffect(() => {
+    console.log("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWww", re);
+  }, [re]);
 
   return (
     <NavigationContainer ref={navigationRef}>

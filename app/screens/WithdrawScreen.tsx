@@ -45,8 +45,8 @@ export const WithdrawScreen = ({ user, setUser, setRe }: Props) => {
       )
       .then((res: any) => {
         console.log("eeee69", res);
-        setRe((prev: number) => {
-          prev + 1;
+        setRe((prev: any) => {
+          return Math.random();
         });
       });
   };

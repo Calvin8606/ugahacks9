@@ -24,6 +24,9 @@ interface Props {
 
 export const HomeScreen = ({ user, setUserId, setUser, re }: Props) => {
   useEffect(() => {
+    console.log("REEEE", re);
+  }, [re]);
+  useEffect(() => {
     if (user.account) {
       axios
         .get(

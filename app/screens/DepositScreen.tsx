@@ -43,8 +43,8 @@ export const DepositScreen = ({ user, setUser, setRe }: Props) => {
         }
       )
       .then((res: any) => {
-        setRe((prev: number) => {
-          prev + 1;
+        setRe((prev: any) => {
+          return Math.random();
         });
         console.log("eeee69", res);
       });
